@@ -9,12 +9,13 @@ class Solarcell(object):
     self.inducedV = inducedV
 
 class Particle(object):
-    def __init__(self, material, bandgap, valence, posx, posy):
+    def __init__(self, material, bandgap, valence, posx, posy, initial_energy):
         self.material = material #string that is the name of the material
         self.bandgap = bandgap
         self.valence = valence #valence electron energy (we can use this for the physics of the photons hitting the 
         self.posx = posx #posx and posy describe the top left corner of the particle
         self.posy = posy
+        self.initial_energy = initial_energy
 
     def setpos(self, x, y):
         self.posx = x
@@ -37,6 +38,9 @@ inducedV = 1
 valence = 1
 cost = 100
 vel = 0
+h = 6.626 * 10 ** -34 #planck's constant
+f = 8 * 10 ** 14 #frequency of ultraviolet light
+initial_energy = h * f #of the photon
 
 # we'll make the individual particles as 1 x 1 blocks for now, to keep things simple-ish
 # to visualize what I've done:  I have a row of atoms represented by 1 x 1 cubes
