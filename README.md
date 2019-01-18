@@ -58,3 +58,86 @@ for i in range(1,11):
 
 for part in siliconparts:
     print(part.posx , part.posy)
+    
+    
+#----------------photon code below---------------------
+import pygame, math, sys, random
+
+#variables
+backgroundcolor = (0,0,0)
+width, height = 1400, 900
+globalGravity = 1000
+FPS = 500
+totalParticles = 100
+particleTrail = False
+maxVelocity = 1
+
+#setup
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Photon Simulation')
+screen.fill(backgroundcolor)
+mainClock = pygame.time.Clock()
+
+#classes and functions
+class Particle:
+    def __init__(self, x, y, size, e, gravity = globalGravity): 
+        self.x = x
+        self.y = y
+        self.size = size
+        self.e = e
+        self.velocity = 0
+        self.maxVelocity = math.sqrt(2*gravity*(height-y-size))
+        self.gravity = gravity
+            
+    def render(self):
+        pygame.draw.circle(screen, (255,255,0), (round(self.x), round(self.y)), self.size)
+    
+    def delete(self):
+        pygame.draw.circle(screen, (0,0,0), (round(self.x), round(self.y)), self.size)
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+   
+def createParticles():
+    particleList = []    
+    for n in range(1,1+totalParticles):
+        particle = Particle(int(width/(1+totalParticles) * (n)), random.randint(10,300), 1, random.randint(98,100)/100, 500)
+        particleList.append(particle)
+    for particle in particleList:
+        particle.render()
+    return particleList
+
+
+#begin
+particleList = createParticles()
+
+#running loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            terminate()
+        if event.type == pygame.KEYDOWN:
+            if event.key == ord('r'): #reset
+                screen.fill(backgroundcolor)
+                particleList = createParticles()    
+    for particle in particleList:
+        if particle.maxVelocity > maxVelocity:
+            maxVelocity = particle.maxVelocity
+        if not particleTrail:
+            particle.delete()
+        if particle.y < height - (particle.size):
+            particle.velocity += (1/FPS) * particle.gravity            
+        else:
+            particle.y = height - particle.size
+            particle.velocity = -1 * particle.velocity * particle.e
+        particle.y += particle.velocity * (1/FPS)
+        particle.x += 0.1
+        particle.render()
+    pygame.display.update()
+    mainClock.tick(FPS)
+    
+
+
+
