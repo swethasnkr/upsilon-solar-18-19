@@ -61,6 +61,7 @@ for part in siliconparts:
     
     
 #----------------photon code below---------------------
+
 import pygame, math, sys, random
 
 #variables
